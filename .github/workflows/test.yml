@@ -22,17 +22,15 @@ jobs:
     - run: |
         docker compose up -d
         docker ps -a
-        
-        max_retry=50
-        counter=0
-        until docker exec -i incus incus config show
-        do
-          sleep 1
-          [[ counter -eq $max_retry ]] && echo "Failed!" && exit 1
-          echo "Trying again. Try #$counter"
-          ((counter++))
-        done
+    - uses: nick-fields/retry@v3
+      with:
+        timeout_seconds: 15
+        max_attempts: 30
+        continue_on_error: false
+        command: |
+          docker exec -i incus incus config show
 
+    - run: |
         docker exec -i incus incus config set core.https_address :8443
         curl -LO https://github.com/lxc/incus/releases/latest/download/bin.linux.incus.x86_64
         sudo install *incus* /usr/local/bin/incus
