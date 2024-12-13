@@ -22,8 +22,7 @@ jobs:
     - run: |
         docker compose up -d
         docker ps -a
-        alias incus="docker exec -ti incus incus"
+        docker exec -ti incus incus config set core.https_address :8443
         curl -LO https://github.com/lxc/incus/releases/latest/download/bin.linux.incus.x86_64
         sudo install *incus* /usr/local/bin/incus
-        incus config set core.https_address :8443
 
