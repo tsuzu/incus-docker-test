@@ -22,3 +22,5 @@ jobs:
     - run: |
         docker compose up -d
         docker ps -a
+        alias incus="docker exec -ti incus incus"
+        incus config set core.https_address :8443
