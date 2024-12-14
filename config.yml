@@ -5,7 +5,7 @@ remotes:
     protocol: simplestreams
     public: true
   incus:
-    addr: https://incus.tsuzu.dev:8443
+    addr: https://localhost:8443
     auth_type: oidc
     project: default
     protocol: incus
