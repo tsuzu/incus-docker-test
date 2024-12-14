@@ -42,6 +42,7 @@ jobs:
           }))
 
     - run: |
+        mkdir -p ~/.config/incus/servercerts
         docker cp incus:/var/lib/incus/server.crt ~/.config/incus/servercerts/incus.crt
         docker exec -i incus incus config set core.https_address :8443
         docker exec -i incus incus config set oidc.audience incus
