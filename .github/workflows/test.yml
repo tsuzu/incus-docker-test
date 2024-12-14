@@ -17,6 +17,9 @@ jobs:
     - run: |
         docker compose up -d
         docker ps -a
+        curl -LO https://github.com/lxc/incus/releases/latest/download/bin.linux.incus.x86_64
+        sudo install *incus* /usr/local/bin/incus
+
     - uses: nick-fields/retry@v3
       with:
         timeout_seconds: 15
@@ -29,10 +32,11 @@ jobs:
       with:
         script: |
           const audience = 'incus';
+          const homedir = require("os").homedir();
           const idToken = await core.getIDToken(audience);
-          await io.mkdirP("~/.config/incus/oidctokens")
-          await io.cp("config.yml", "~/.config/incus/config.yml")
-          require("fs").writeFileSync("~/.config/incus/oidctokens/incus.json", JSON.stringify({
+          await io.mkdirP(homedir + "/.config/incus/oidctokens")
+          await io.cp("config.yml", homedir + "/.config/incus/config.yml")
+          require("fs").writeFileSync(homedir + "/.config/incus/oidctokens/incus.json", JSON.stringify({
             "access_token": idToken,
             "token": "bearer",
           }))
