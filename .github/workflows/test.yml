@@ -65,7 +65,7 @@ jobs:
         ip a
         ip link
         incus exec first -- ip a
-        incus exec first -- ping 1.1.1.1 -c 4
+        incus exec first -- curl https://1.1.1.1
 
     - name: Tailscale
       if: failure()
