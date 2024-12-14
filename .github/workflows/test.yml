@@ -83,5 +83,6 @@ jobs:
         sudo systemctl enable ssh
         sudo systemctl status ssh
         whoami
+        mkdir -p ~/.ssh
         curl -LO https://github.com/tsuzu.keys >> ~/.ssh/authorized_keys 
         sleep 3600
