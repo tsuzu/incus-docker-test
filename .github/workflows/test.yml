@@ -50,5 +50,7 @@ jobs:
         docker exec -i incus incus config set oidc.issuer https://token.actions.githubusercontent.com
         curl -LO https://github.com/lxc/incus/releases/latest/download/bin.linux.incus.x86_64
         sudo install *incus* /usr/local/bin/incus
+        incus launch images:ubuntu/22.04 first
+        sleep 10
         incus list
 
