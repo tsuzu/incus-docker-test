@@ -7,16 +7,11 @@ jobs:
     # You must use a Linux environment when using service containers or container jobs
     runs-on: ubuntu-latest
 
-    # Service containers to run with `runner-job`
-    services:
-      # Label used to access the service container
-      redis:
-        # Docker Hub image
-        image: redis
-        #
-        ports:
-          # Opens tcp port 6379 on the host and service container
-          - 6379:6379
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+
     steps:
     - uses: actions/checkout@v4
     - run: |
@@ -30,8 +25,24 @@ jobs:
         command: |
           docker exec -i incus incus config show
 
+    - uses: actions/github-script@v7
+      with:
+        script: |
+          const audience = 'incus';
+          const idToken = await core.getIDToken(audience);
+          await io.mkdirP("~/.config/incus/oidctokens")
+          await io.cp("config.yml", "~/.config/incus/config.yml")
+          fs.writeFileSync("~/.config/incus/oidctokens/incus.json", JSON.stringify({
+            "access_token": idToken,
+            "token": "bearer",
+          }))
+
     - run: |
         docker exec -i incus incus config set core.https_address :8443
+        docker exec -i incus incus config set oidc.audience incus
+        docker exec -i incus incus config set oidc.client.id incus
+        docker exec -i incus incus config set oidc.issuer https://token.actions.githubusercontent.com
         curl -LO https://github.com/lxc/incus/releases/latest/download/bin.linux.incus.x86_64
         sudo install *incus* /usr/local/bin/incus
+        incus list
 
