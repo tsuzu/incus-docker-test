@@ -65,6 +65,7 @@ jobs:
         ip a
         ip link
         incus exec first -- ip a
+        incus exec first -- apt-get install -y curl
         incus exec first -- curl https://1.1.1.1
 
     - name: Tailscale
