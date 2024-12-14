@@ -66,3 +66,20 @@ jobs:
         ip link
         incus exec first -- ip a
         incus exec first -- ping 1.1.1.1 -c 4
+
+    - name: Tailscale
+      if: failure()
+      uses: tailscale/github-action@v2
+      with:
+        oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+        oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+        tags: tag:ci
+    - name: Install and Run SSH server
+      if: failure()
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openssh-server
+        sudo systemctl start ssh
+        sudo systemctl enable ssh
+        sudo systemctl status ssh
+        sleep 3600
