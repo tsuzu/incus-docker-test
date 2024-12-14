@@ -57,8 +57,10 @@ jobs:
         incus network create br0 --type=bridge
         incus profile device add default eth0 nic name=eth0 nictype=bridged parent=br0
         incus launch images:ubuntu/22.04 first
+        sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
         sleep 10
         incus list
         ip a
         ip link
-
+        incus exec first -- ip a
+        incus exec first -- ping 1.1.1.1 -c 4
