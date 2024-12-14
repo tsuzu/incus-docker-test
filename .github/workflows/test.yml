@@ -54,6 +54,8 @@ jobs:
         incus profile show default
         incus storage create default dir
         incus profile device add default root disk pool=default path=/
+        incus network create br0 --type=bridge
+        incus profile device add default eth0 nic name=eth0 nictype=bridged parent=br0
         incus launch images:ubuntu/22.04 first
         sleep 10
         incus list
