@@ -32,7 +32,7 @@ jobs:
           const idToken = await core.getIDToken(audience);
           await io.mkdirP("~/.config/incus/oidctokens")
           await io.cp("config.yml", "~/.config/incus/config.yml")
-          fs.writeFileSync("~/.config/incus/oidctokens/incus.json", JSON.stringify({
+          require("fs").writeFileSync("~/.config/incus/oidctokens/incus.json", JSON.stringify({
             "access_token": idToken,
             "token": "bearer",
           }))
