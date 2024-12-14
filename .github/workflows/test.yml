@@ -53,7 +53,7 @@ jobs:
         incus profile list
         incus profile show default
         incus storage create default dir
-        incus profile device add default disk pool=default path=/
+        incus profile device add default root disk pool=default path=/
         incus launch images:ubuntu/22.04 first
         sleep 10
         incus list
